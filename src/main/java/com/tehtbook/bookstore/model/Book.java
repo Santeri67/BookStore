@@ -28,6 +28,9 @@ public class Book {
         this.isbn = isbn;
         this.price = price;
     }
+    public Long getId() {
+        return id;
+    }
 
     public String getTitle() {
         return title;
