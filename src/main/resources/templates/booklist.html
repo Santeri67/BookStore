@@ -38,25 +38,30 @@
             background-color: #4CAF50;
         }
     </style>
+</head>
 <body>
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Author</th>
+                <th>ID</th>
                 <th>Title</th>
+                <th>Author</th>
+                <th>Publication Year</th>
                 <th>ISBN</th>
-                <th>Year</th>
                 <th>Price</th>
+                <th>Category</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="book : ${books}">
-                <td th:text="${book.author}">Author</td>
+            <tr th:each="book : ${books}" th:if="${book != null}">
+                <td th:text="${book.id}">ID</td>
                 <td th:text="${book.title}">Title</td>
+                <td th:text="${book.author}">Author</td>
+                <td th:text="${book.publicationYear}">Publication Year</td>
                 <td th:text="${book.isbn}">ISBN</td>
-                <td th:text="${book.publicationYear}">Year</td>
                 <td th:text="${book.price}">Price</td>
+                <td th:text="${book.category != null ? book.category.name : 'N/A'}">Category</td>
                 <td>
                     <a th:href="@{/edit/{id}(id=${book.id})}" class="btn btn-primary">Edit</a>
                     <a th:href="@{/delete/{id}(id=${book.id})}" class="btn btn-danger">Delete</a>

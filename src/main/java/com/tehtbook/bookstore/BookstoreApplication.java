@@ -1,6 +1,5 @@
 package com.tehtbook.bookstore;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,27 +13,26 @@ import com.tehtbook.bookstore.repository.CategoryRepository;
 @SpringBootApplication
 public class BookstoreApplication {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    public static void main(String[] args) {
+        SpringApplication.run(BookstoreApplication.class, args);
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(BookstoreApplication.class, args);
-	}
-	@Bean
-    CommandLineRunner runner(BookRepository repository) {
+    @Bean
+    CommandLineRunner runner(BookRepository bookRepository, CategoryRepository categoryRepository) {
         return args -> {
-            // Luo esimerkkikirjoja ja tallenna ne tietokantaan
-            Book book1 = new Book("Harry Potter and the Philosopher's stone", "J.K Rowling", 2021, "1234567890", 29.90);
-            Book book2 = new Book("A Dance with Dragons", "R. R. Martin", 2019, "0987654321", 39.90);
-            repository.save(book1);
-            repository.save(book2);
-            // ... tallenna lisää kirjoja tarvittaessa ...
-            Category category1 = new Category("Scifi");
-            Category category2 = new Category("Comic");
-            Category category3 = new Category("Fiction");
-            categoryRepository.save(category1);
-            categoryRepository.save(category2);
-            categoryRepository.save(category3);
+            // Ensin luodaan kategoriat ja tallennetaan ne tietokantaan
+            Category scifi = new Category("Sci-Fi");
+            Category fantasy = new Category("Fantasy");
+            categoryRepository.save(scifi);
+            categoryRepository.save(fantasy);
+
+            // Sitten luodaan kirjat ja liitetään ne luotuihin kategorioihin
+            Book book1 = new Book("Harry Potter and the Philosopher's Stone", "J.K. Rowling", 1997, "9780747532699", 10.99, scifi);
+            Book book2 = new Book("A Dance with Dragons", "George R. R. Martin", 2011, "9780553801477", 15.99, fantasy);
+
+            // Tallennetaan kirjat tietokantaan
+            bookRepository.save(book1);
+            bookRepository.save(book2);
         };
     }
 }
