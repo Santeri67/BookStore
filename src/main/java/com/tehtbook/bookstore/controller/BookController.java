@@ -23,13 +23,13 @@ public class BookController {
     // Konstruktori-injektointi BookRepositorylle
     public BookController(BookRepository bookRepository, CategoryRepository categoryRepository) {
         this.bookRepository = bookRepository;
-        this.categoryRepository = categoryRepository; // Lisätty rivi
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping("/books")
     public ResponseEntity<List<Book>> bookList() {
         List<Book> books = bookRepository.findAll();
-        return ResponseEntity.ok(books); // Palauttaa HTTP 200 OK vastauksen ja kirjalistan JSON-muodossa
+        return ResponseEntity.ok(books);
     }
     @GetMapping("/books/{id}")
 public ResponseEntity<Book> getBookById(@PathVariable Long id) {
@@ -63,7 +63,6 @@ public ResponseEntity<Book> getBookById(@PathVariable Long id) {
 }
     @PostMapping("/editbook")
         public String editBook(@ModelAttribute Book book) {
-    // Oletetaan, että kirjalla on jo 'id' asetettu, joten tämä päivittää olemassa olevan kirjan
             bookRepository.save(book);
             return "redirect:/booklist";
 }
