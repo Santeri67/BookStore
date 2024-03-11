@@ -1,5 +1,7 @@
 package com.tehtbook.bookstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,10 +22,11 @@ public class Book {
     private double price;
 
     @ManyToOne
+    @JsonIgnore
     private Category category;
 
-    public Book() {
-    }
+    public Book() {}
+
     public Category getCategory() {
         return category;
     }

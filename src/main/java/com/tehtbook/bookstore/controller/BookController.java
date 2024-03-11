@@ -2,35 +2,45 @@ package com.tehtbook.bookstore.controller;
 
 import java.util.List;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.tehtbook.bookstore.model.Book;
 import com.tehtbook.bookstore.repository.BookRepository;
+import com.tehtbook.bookstore.repository.CategoryRepository;
 
-@Controller
+@RestController
 public class BookController {
 
     private final BookRepository bookRepository;
+    private final CategoryRepository categoryRepository;
 
     // Konstruktori-injektointi BookRepositorylle
-    public BookController(BookRepository bookRepository) {
+    public BookController(BookRepository bookRepository, CategoryRepository categoryRepository) {
         this.bookRepository = bookRepository;
+        this.categoryRepository = categoryRepository; // Lisätty rivi
     }
 
-    @GetMapping("/booklist")
-    public String bookList(Model model) {
+    @GetMapping("/books")
+    public ResponseEntity<List<Book>> bookList() {
         List<Book> books = bookRepository.findAll();
-        model.addAttribute("books", books);
-        return "booklist";
+        return ResponseEntity.ok(books); // Palauttaa HTTP 200 OK vastauksen ja kirjalistan JSON-muodossa
     }
+    @GetMapping("/books/{id}")
+public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+    return bookRepository.findById(id)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
+}
     @GetMapping("/addbook")
         public String showAddBookForm(Model model) {
             model.addAttribute("book", new Book());
+            model.addAttribute("categories", categoryRepository.findAll());
             return "addbook";
 }
     @PostMapping("/addbook")
