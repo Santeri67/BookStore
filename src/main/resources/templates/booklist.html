@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
@@ -40,6 +41,16 @@
     </style>
 </head>
 <body>
+    <!-- Lisää tämä osio kirjaluettelon yläosaan -->
+    <div sec:authorize="isAuthenticated()">
+        Logged in as: <span sec:authentication="name">Käyttäjä</span>
+        <form th:action="@{/logout}" method="post">
+            <!-- CSRF tokenin piilotettu kenttä -->
+            <input type="submit" value="Logout"/>
+        </form>
+    </div>
+    
+    
     <table class="table table-striped">
         <thead>
             <tr>
@@ -64,7 +75,7 @@
                 <td th:text="${book.category != null ? book.category.name : 'N/A'}">Category</td>
                 <td>
                     <a th:href="@{/edit/{id}(id=${book.id})}" class="btn btn-primary">Edit</a>
-                    <a th:href="@{/delete/{id}(id=${book.id})}" class="btn btn-danger">Delete</a>
+                    <a th:href="@{/delete/{id}(id=${book.id})}" sec:authorize="hasRole('ADMIN')" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         </tbody>

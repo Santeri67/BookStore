@@ -3,18 +3,18 @@ package com.tehtbook.bookstore.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.tehtbook.bookstore.model.Book;
 import com.tehtbook.bookstore.repository.BookRepository;
 import com.tehtbook.bookstore.repository.CategoryRepository;
 
-@RestController
+@Controller
 public class BookController {
 
     private final BookRepository bookRepository;
@@ -66,4 +66,16 @@ public ResponseEntity<Book> getBookById(@PathVariable Long id) {
             bookRepository.save(book);
             return "redirect:/booklist";
 }
+// Voit lisätä tämän olemassa olevaan kontrolleriin
+    @GetMapping("/login")
+        public String login() {
+        return "login";
+}
+@GetMapping("/booklist")
+public String bookList(Model model) {
+    List<Book> books = bookRepository.findAll();
+    model.addAttribute("books", books);
+    return "booklist"; // Olettaen, että sinulla on booklist.html tiedosto templates-kansiossa
+}
+
 }
