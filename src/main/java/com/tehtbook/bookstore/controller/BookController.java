@@ -3,6 +3,7 @@ package com.tehtbook.bookstore.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,11 +49,9 @@ public ResponseEntity<Book> getBookById(@PathVariable Long id) {
             bookRepository.save(book);
             return "redirect:/booklist";
 }
-    @GetMapping("/delete/{id}")
-        public String deleteBook(@PathVariable("id") Long bookId) {
-            if (bookId != null) {
-                bookRepository.deleteById(bookId);
-    }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+public String deleteBook(Long id) {
+    // Poista kirja tietokannasta
     return "redirect:/booklist";
 }
     @GetMapping("/edit/{id}")
